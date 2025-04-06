@@ -19,9 +19,20 @@ RUN apt-get update && apt-get install -y \
 # Copia los archivos del proyecto
 COPY . /app
 
+# Establece variables de entorno (importante para Django)
+ENV PYTHONUNBUFFERED=1 \
+    DJANGO_SETTINGS_MODULE=fiduswriter.settings.production \
+    DEBUG=False
+
 # Instala las dependencias de Python
 RUN pip install --upgrade pip
 RUN pip install .
+
+# Crea el directorio para archivos estáticos
+RUN mkdir -p /app/static
+
+# Configura la variable STATIC_ROOT (esto evita el error del collectstatic)
+ENV STATIC_ROOT=/app/static
 
 # Ejecuta migraciones antes de iniciar el servidor
 RUN python manage.py migrate
