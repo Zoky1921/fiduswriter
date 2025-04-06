@@ -18,10 +18,10 @@ def get_url_base(origin, conn):
         # or
         # {"internal": 8000, "external": "ws1.fiduswriter.com"}
         if isinstance(conn["external"], str):
-            return f"{conn["external"]}/ws"
+            return f"{conn['external']}/ws"
         elif isinstance(conn["external"], int):
             parsed_origin = urlparse(origin)
             origin_name = parsed_origin.hostname
-            return f"{origin_name}:{conn["external"]}/ws"
+            return f"{origin_name}:{conn['external']}/ws"
 
     return "/ws"
