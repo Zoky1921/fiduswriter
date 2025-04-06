@@ -1,4 +1,4 @@
-# Usa una imagen base con Python 3.11
+# Usa una imagen base liviana con Python 3.11
 FROM python:3.11-slim
 
 # Establece el directorio de trabajo
@@ -16,29 +16,15 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copia los archivos del proyecto
+# Copia el contenido del proyecto
 COPY . /app
 
-# Establece variables de entorno (importante para Django)
-ENV PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=fiduswriter.settings.production \
-    DEBUG=False
-
-# Instala las dependencias de Python
+# Instala dependencias de Python
 RUN pip install --upgrade pip
 RUN pip install .
 
-# Crea el directorio para archivos estáticos
-RUN mkdir -p /app/static
-
-# Configura la variable STATIC_ROOT (esto evita el error del collectstatic)
-ENV STATIC_ROOT=/app/static
-
-# Ejecuta migraciones antes de iniciar el servidor
-RUN python manage.py migrate
-
-# Expone el puerto 8000 para Render
+# Expone el puerto (Render usa este por defecto)
 EXPOSE 8000
 
-# Comando para arrancar el servidor con Daphne (ASGI)
+# Comando de inicio: servidor ASGI con Daphne
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "fiduswriter.asgi:application"]
