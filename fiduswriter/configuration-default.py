@@ -1,25 +1,19 @@
 import os
+from pathlib import Path
 
 #############################################
 # Django settings for Fidus Writer project. #
 #############################################
 
-# After copying this file to configuration.py, adjust the below settings to
-# work with your setup.
-
-# If you don't want to show debug messages, set DEBUG to False.
-
 DEBUG = True
+
 # SOURCE_MAPS - allows any value used by webpack devtool
-# https://webpack.js.org/configuration/devtool/
-# For example
-# SOURCE_MAPS = 'cheap-module-source-map' # fast - line numbers only
-# SOURCE_MAPS = 'source-map' # slow - line and column number
 SOURCE_MAPS = False
 
-PROJECT_PATH = os.environ.get("PROJECT_PATH")
-# SRC_PATH is the root path of the FW sources.
-SRC_PATH = os.environ.get("SRC_PATH")
+# Proyecto base path (mejor con Pathlib para mayor robustez)
+BASE_DIR = Path(__file__).resolve().parent
+PROJECT_PATH = os.environ.get("PROJECT_PATH", str(BASE_DIR))
+SRC_PATH = os.environ.get("SRC_PATH", str(BASE_DIR / "src"))
 
 DATABASES = {
     "default": {
@@ -29,136 +23,57 @@ DATABASES = {
     }
 }
 
-# Interval between document saves
-# DOC_SAVE_INTERVAL = 1
-
-# Migrate, transpile JavaScript and install required fixtures automatically
-# when starting runserver. You might want to turn this off on a production
-# server. The default is the opposite of DEBUG
-
-# AUTO_SETUP = False
-
-# This determines whether the server is used for testing and will let the
-# users know upon signup know that their documents may disappear.
 TEST_SERVER = True
-# This is the contact email that will be shown in various places all over
-# the site.
 CONTACT_EMAIL = "mail@email.com"
-# Ports that Fidus Writer will run on.
-# PORTS = [8000,]
 
-ADMINS = (("Your Name", "your_email@example.com"),)
-
-# Whether anyone surfing to the site can open an account with a login/password.
-REGISTRATION_OPEN = True
-
-# Whether user's can login using passwords (if not, they will only be able to
-# sign in using social accounts).
-PASSWORD_LOGIN = True
-
-# Whether anyone surfing to the site can open an account or login with a
-# socialaccount.
-SOCIALACCOUNT_OPEN = True
-
-# ACCOUNT_EMAIL_VERIFICATION = 'optional'
-
-# This determines whether there is a star labeled "Free" on the login page
-IS_FREE = True
-
+ADMINS = [("Your Name", "your_email@example.com")]
 MANAGERS = ADMINS
 
-# DATABASES = {
-#    'default': {
-# Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-#        'ENGINE': 'django.db.backends.',
-# Or path to database file if using sqlite3.
-#        'NAME': '',
-# Not used with sqlite3.
-#        'USER': '',
-# Not used with sqlite3.
-#        'PASSWORD': '',
-# Set to empty string for localhost. Not used with sqlite3.
-#        'HOST': '',
-# Set to empty string for default. Not used with sqlite3.
-#        'PORT': '',
-# The max time in seconds a database connection should wait for a subsequent
-# request.
-#        'CONN_MAX_AGE': 15
-#    }
-# }
+REGISTRATION_OPEN = True
+PASSWORD_LOGIN = True
+SOCIALACCOUNT_OPEN = True
+IS_FREE = True
 
-# Send emails using an SMTP server
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'localhost'
-# EMAIL_HOST_USER = ''
-# EMAIL_HOST_PASSWORD = ''
-# EMAIL_PORT = 25
-# EMAIL_SUBJECT_PREFIX = '[Fidus Writer]'
-# EMAIL_USE_TLS = False
-# DEFAULT_FROM_EMAIL = 'mail@email.com' # For messages to end users
-# SERVER_EMAIL = 'mail@email.com' # For messages to server administrators
-
-# FOOTER_LINKS = [
-#     {
-#         "text": "Terms and Conditions",
-#         "link": "/pages/terms/"
-#     },
-#     {
-#         "text": "Privacy policy",
-#         "link": "/pages/privacy/"
-#     },
-#     {
-#         "text": "Equations and Math with MathLive",
-#         "link": "https://github.com/arnog/mathlive#readme",
-#         "external": True
-#     },
-#     {
-#         "text": "Citations with Citation Style Language",
-#         "link": "https://citationstyles.org/",
-#         "external": True
-#     },
-#     {
-#         "text": "Editing with ProseMirror",
-#         "link": "https://prosemirror.net/",
-#         "external": True
-#     }
-# ]
-
-
+# Aplicaciones instaladas (puedes agregar más si las necesitas)
 INSTALLED_APPS = [
-    # If you want to enable one or several of the social network login options
-    # below, make sure you add the authorization keys at:
-    # http://SERVER.COM/admin/socialaccount/socialapp/
-    # 'allauth.socialaccount.providers.facebook',
-    # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.twitter',
-    # 'allauth.socialaccount.providers.github',
-    # 'allauth.socialaccount.providers.linkedin',
-    # 'allauth.socialaccount.providers.openid',
-    # 'allauth.socialaccount.providers.persona',
-    # 'allauth.socialaccount.providers.soundcloud',
-    # 'allauth.socialaccount.providers.stackexchange',
     "user_template_manager",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 
-# A list of allowed hostnames of this Fidus Writer installation
 ALLOWED_HOSTS = [
     "localhost",
+    "127.0.0.1",
 ]
 
-# Disable service worker (default is True)
-# USE_SERVICE_WORKER = False
+# Si usás HTTPS y querés usar login por redes sociales
+# ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
-# The maximum size of user uploaded images in bytes. If you use NGINX, note
-# that also it needs to support at least this size.
+# Si necesitás habilitar CORS o CSRF desde otros dominios
+# CSRF_TRUSTED_ORIGINS = ["https://tu-dominio.com"]
+
+# Tamaño máximo de imágenes subidas por usuarios (deshabilitado)
 MEDIA_MAX_SIZE = False
 
-# Create URLs in https (required for social media login)
-# ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+# STATIC y MEDIA
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 
-# Which domains served over http to allow post requests from. Should be the same as ALLOWED_HOSTS
-# But including https://, for example "https://www.domain.com".
-# CSRF_TRUSTED_ORIGINS = []
+STATIC_ROOT = os.path.join(PROJECT_PATH, "staticfiles")
+MEDIA_ROOT = os.path.join(PROJECT_PATH, "mediafiles")
 
-# Add branding logo inside of "static-libs" folder. For example: static-libs/svg/logo.svg
-# BRANDING_LOGO = "svg/logo.svg"
+# Configuración de email (si se envían notificaciones)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.tu-dominio.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'usuario'
+# EMAIL_HOST_PASSWORD = 'contraseña'
+# DEFAULT_FROM_EMAIL = 'noreply@tu-dominio.com'
+
+# SECRET_KEY obligatoria para Django
+SECRET_KEY = os.environ.get("SECRET_KEY", "reemplazar-esto-por-una-real-en-producción")
