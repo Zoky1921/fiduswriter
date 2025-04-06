@@ -44,22 +44,15 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-# ALLOWED_HOSTS puede leerse desde variable de entorno o usar valor por defecto
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS",
-    "localhost,127.0.0.1,fiduswriter.onrender.com"
-).split(",")
+# ✅ ALLOWED_HOSTS desde variable de entorno
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
-# CSRF_TRUSTED_ORIGINS (recomendado en producción con HTTPS)
-# CSRF_TRUSTED_ORIGINS = ["https://fiduswriter.onrender.com"]
-
-MEDIA_MAX_SIZE = False
-
+# STATIC y MEDIA
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 
 STATIC_ROOT = os.path.join(PROJECT_PATH, "staticfiles")
 MEDIA_ROOT = os.path.join(PROJECT_PATH, "mediafiles")
 
-# SECRET_KEY obligatoria
-SECRET_KEY = os.environ.get("SECRET_KEY", "reemplazar-esto-por-una-real-en-producción")
+# SECRET_KEY desde entorno (Render: FIDUSWRITER_SECRET_KEY)
+SECRET_KEY = os.environ.get("FIDUSWRITER_SECRET_KEY", "reemplazar-esto-en-producción")
