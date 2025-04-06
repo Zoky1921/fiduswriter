@@ -1,21 +1,17 @@
 FROM python:3.11
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libxml2-dev \
-    libxslt1-dev \
-    zlib1g-dev \
-    wkhtmltopdf \
-    pandoc \
-    && rm -rf /var/lib/apt/lists/*
-
+# Crear directorio para la app
 WORKDIR /app
 
+# Copiar todos los archivos
 COPY . .
 
+# Instalar dependencias
 RUN pip install --upgrade pip
-RUN pip install -e .
+RUN pip install .
 
-EXPOSE 8000
+# Recopilar archivos estáticos (si es necesario, se puede quitar)
+RUN python manage.py collectstatic --noinput
 
-CMD ["fiduswriter", "runserver", "0.0.0.0:8000"]
+# Comando para migrar la base de datos e iniciar el servidor
+CMD ["sh", "-c", "python manage.py migrate && daphne fiduswriter.asgi:application"]
