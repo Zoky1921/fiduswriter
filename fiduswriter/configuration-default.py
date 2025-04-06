@@ -45,16 +45,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-]
+# 👇 ALLOWED_HOSTS actualizado para Render
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1,fiduswriter.onrender.com").split(",")
 
 # Si usás HTTPS y querés usar login por redes sociales
 # ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
 # Si necesitás habilitar CORS o CSRF desde otros dominios
-# CSRF_TRUSTED_ORIGINS = ["https://tu-dominio.com"]
+# CSRF_TRUSTED_ORIGINS = ["https://fiduswriter.onrender.com"]
 
 # Tamaño máximo de imágenes subidas por usuarios (deshabilitado)
 MEDIA_MAX_SIZE = False
